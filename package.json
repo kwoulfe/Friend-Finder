@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/kwoulfe/Friend-Finder/issues"
   },
-  "homepage": "https://github.com/kwoulfe/Friend-Finder#readme"
+  "homepage": "https://github.com/kwoulfe/Friend-Finder#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "path": "^0.12.7"
+  }
 }
