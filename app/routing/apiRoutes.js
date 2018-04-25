@@ -5,35 +5,36 @@ module.exports = function(app) {
     res.json(friendData);
   });
 
+  //
   app.post('/api/survey', function(req, res) {
     console.log(req.body);
-    function findUserMatch() {
+
+    function findUserMatch(scores) {
       var userSum = 0;
 
-      for (let h = 0; h < req.body.scores.length; h++) {
-        userSum += req.body.scores[h];
+      for (let h = 0; h < scores.length; h++) {
+        userSum += +scores[h];
       }
-
+      var bestMatch = {
+        friend: null,
+        lowest: null
+      };
       for (let i = 0; i < friendData.length; i++) {
-        var bestMatch = {
-          friend: friendData[0],
-          lowest: 10000
-        };
         var runningTotal = 0;
         for (let j = 0; j < friendData[i].scores.length; j++) {
           runningTotal += friendData[i].scores[j];
         }
-
-        if (Math.abs(userSum - runningTotal) < bestMatch.lowest) {
+        var difference = Math.abs(userSum - runningTotal);
+        if (difference < bestMatch.lowest || bestMatch.friend == null) {
           bestMatch.friend = friendData[i];
-          bestMatch.lowest = Math.abs(userSum - runningTotal);
+          bestMatch.lowest = difference;
         }
-
-        return bestMatch.friend;
       }
+      return bestMatch.friend;
     }
-    console.log(findUserMatch());
+    var newMatch = findUserMatch(req.body.scores);
+    console.log(newMatch);
     friendData.push(req.body);
-    res.json(findUserMatch());
+    res.json(newMatch);
   });
 };
